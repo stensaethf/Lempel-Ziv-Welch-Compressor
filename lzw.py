@@ -64,6 +64,8 @@ def decompress(compressed_lst):
 	@params: compressed string (list of ints).
 	@return: decompressed string.
 	"""
+	if compressed_lst == []:
+		return ''
 	# We start by reconstructing the dictionary we used to compress the
 	# string. However, now the keys are the integers and the values are the 
 	# strings.
@@ -81,7 +83,10 @@ def decompress(compressed_lst):
 	# And then make sure to add a new value to our table, which is the
 	# previous element plus the first letter of the current string.
 	for element in compressed_lst:
-		if element not in table:
+		if element == len(table):
+			# print prev # For testing purposes.
+			string = prev + prev
+		elif element not in table:
 			printError(1)
 		else:
 			string = table[element]
@@ -106,10 +111,17 @@ def printError(num):
 	sys.exit()
 
 def main():
-	comp = compress('abananabanana')
-	print(comp)
+	string = 'frederik is here to study and do lots of ssthisngsigssssn'\
+			 ' vskgskht eskgs fskj fvskjfsf sjfv skfjs v\n\n\n ksgkshksgkhsg'\
+			 ' ksgkhsghkskghk'
+	comp = compress(string)
+	# print(comp)
 	decomp = decompress(comp)
-	print(decomp)
+	# print(decomp)
+
+	if string != decomp:
+		print 'Failed.'
+		print string
 
 
 if __name__ == '__main__':
