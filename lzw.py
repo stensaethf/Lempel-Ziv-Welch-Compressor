@@ -6,7 +6,6 @@ Frederik Roenn Stensaeth
 A Python implementation of the Lempel-Ziv-Welch compression algorithm.
 '''
 
-# Any imports?
 import sys
 
 def compress(text):
@@ -32,8 +31,8 @@ def compress(text):
 	# in the string you are (using the value index). Value keeps track of the
 	# longest substring you have seen that is in your table.
 	for char in text:
+		# Add the latest character to our substring.
 		total = value + char
-		# print total
 		index += 1
 		# If we have seen total before we want to make it our value (aka we
 		# want to remember it) and move on to the next character. However,
@@ -84,11 +83,9 @@ def decompress(compressed_lst):
 	for element in compressed_lst:
 		if element not in table:
 			printError(1)
-		elif element in table:
-			# print(element)
-			string = table[element]
 		else:
-			printError(1)
+			string = table[element]
+
 		decompressed_str += string
 
 		# Constructs new values to add to our table by taking the previous
@@ -104,7 +101,8 @@ def printError(num):
 		print('Error. Invalid compressed list given to decompress().')
 	else:
 		print('Error.')
-	print('Usage: $ lzw.py <string to be compressed> | <compressed list>')
+	print('Usage: $ lzw.py (-c <string to be compressed>) |'\
+		  ' (-d <compressed list>)')
 	sys.exit()
 
 def main():
@@ -112,13 +110,6 @@ def main():
 	print(comp)
 	decomp = decompress(comp)
 	print(decomp)
-
-	# if len(sys.argv) != 1:
-	# 	printError(0)
-	# if sys.argv.type == list:
-	# 	Xx
-	# elif sys.argv.type == str:
-	# 	Xx
 
 
 if __name__ == '__main__':
