@@ -7,6 +7,8 @@ A Python implementation of the Lempel-Ziv-Welch compression algorithm.
 '''
 
 import sys
+import pickle
+import os.path
 
 def compress(text):
 	"""
@@ -16,6 +18,11 @@ def compress(text):
 	@params: string to be compressed.
 	@return: compressed string (list of ints).
 	"""
+	if text == '':
+		return []
+	elif type(text) != str:
+		printError(2)
+
 	# Creates a list that will hold the integers after compression of the
 	# string.
 	compressed_lst = []
@@ -66,6 +73,8 @@ def decompress(compressed_lst):
 	"""
 	if compressed_lst == []:
 		return ''
+	elif type(compressed_lst) != list:
+		printError(1)
 	# We start by reconstructing the dictionary we used to compress the
 	# string. However, now the keys are the integers and the values are the 
 	# strings.
@@ -102,26 +111,86 @@ def decompress(compressed_lst):
 	return decompressed_str
 
 def printError(num):
+	"""
+	printError() prints an error and usage message.
+
+	@params: integer to customize the error message (1 if in decompress(),
+			 !1 for other).
+	@return: n/a.
+	"""
 	if num == 1:
 		print('Error. Invalid compressed list given to decompress().')
+	elif num == 2:
+		print('Error. Invalid string given to compress().')
 	else:
 		print('Error.')
-	print('Usage: $ lzw.py (-c <string to be compressed>) |'\
-		  ' (-d <compressed list>)')
+	print('Usage:')
+	print('Compression: $ lzw.py <something>.txt <something>.lzw compress')
+	print('Decompression: $ lzw.py <something>.txt <something>.lzw decompress')
 	sys.exit()
 
-def main():
-	string = 'frederik is here to study and do lots of ssthisngsigssssn'\
-			 ' vskgskht eskgs fskj fvskjfsf sjfv skfjs v\n\n\n ksgkshksgkhsg'\
-			 ' ksgkhsghkskghk'
-	comp = compress(string)
-	# print(comp)
-	decomp = decompress(comp)
-	# print(decomp)
+def printSummary(file1, file2):
+	"""
+	printSummary() prints out the number of bytes in the original file and in
+	the result file.
 
-	if string != decomp:
-		print 'Failed.'
-		print string
+	@params: two files that are to be checked.
+	@return: n/a.
+	"""
+	# Checks if the files exist in the current directory.
+	if (not os.path.isfile(file1)) or (not os.path.isfile(file2)):
+		printError(0)
+
+	# Finds out how many bytes in each file.
+	f1_bytes = os.path.getsize(file1)
+	f2_bytes = os.path.getsize(file2)
+
+	sys.stderr.write(str(file1) + ': ' + str(f1_bytes) + ' bytes\n')
+	sys.stderr.write(str(file2) + ': ' + str(f2_bytes) + ' bytes\n')
+
+def main():
+	if len(sys.argv) == 4:
+		if sys.argv[3] == 'compress':
+			try:
+				f = open(sys.argv[1], 'r')
+				# print('yest')
+
+				comp = compress(f.read())
+				# print('yest')
+				# print comp
+
+				pickle.dump(comp, open(sys.argv[2], 'wb'))
+				f.close()
+
+				printSummary(sys.argv[1], sys.argv[2])
+			except: #Exception,e:
+				# print e
+				printError(0)
+		elif sys.argv[3] == 'decompress':
+			try:
+				comp = pickle.load(open(sys.argv[1], 'rb'))
+
+				decomp = decompress(comp)
+
+				f = open(sys.argv[2], 'w')
+				f.write(decomp)
+				f.close()
+
+				printSummary(sys.argv[1], sys.argv[2])
+			except:
+				printError(1)
+		else:
+			printError(0)
+	else:
+		printError(0)
+
+
+
+
+
+
+
+
 
 
 if __name__ == '__main__':
