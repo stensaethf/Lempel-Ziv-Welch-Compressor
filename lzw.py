@@ -33,7 +33,7 @@ def compress(text):
 	# longest substring you have seen that is in your table.
 	for char in text:
 		total = value + char
-		print total
+		# print total
 		index += 1
 		# If we have seen total before we want to make it our value (aka we
 		# want to remember it) and move on to the next character. However,
@@ -76,21 +76,23 @@ def decompress(compressed_lst):
 	compressed_lst = compressed_lst[1:]
 	decompressed_str = prev
 	# Loops over element in the compressed list so that we can decompress it.
+	# If an element does not exist in our table it must be premature and
+	# hence, the list we were given is invalid --> error.
+	# If an element is in the list we retrieve it and add it to our solution.
+	# And then make sure to add a new value to our table, which is the
+	# previous element plus the first letter of the current string.
 	for element in compressed_lst:
 		if element not in table:
 			printError(1)
 		elif element in table:
-			print(element)
+			# print(element)
 			string = table[element]
-		elif element == len(table):
-			print('entered!')
-			print prev
-			print prev[0]
-			string = prev + prev[0]
 		else:
 			printError(1)
 		decompressed_str += string
 
+		# Constructs new values to add to our table by taking the previous
+		# string and adding the first letter of the current string to it.
 		table[len(table)] = prev + string[0]
 
 		prev = string
@@ -111,10 +113,6 @@ def main():
 	decomp = decompress(comp)
 	print(decomp)
 
-	comp = compress('TOTOTOOTSTOOTOTS')
-	print(comp)
-	decomp = decompress(comp)
-	print(decomp)
 	# if len(sys.argv) != 1:
 	# 	printError(0)
 	# if sys.argv.type == list:
