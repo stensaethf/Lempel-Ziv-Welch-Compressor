@@ -7,7 +7,7 @@ A Python implementation of the Lempel-Ziv-Welch compression algorithm.
 '''
 
 import sys
-import pickle
+# import pickle
 import os.path
 
 def compress(text):
