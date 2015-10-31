@@ -61,7 +61,14 @@ def compress(text):
 			compressed_lst.append(table[value])
 		# print(total) # For testing purposes.
 
-	return compressed_lst
+	compressed_str = ''
+	for num in compressed_lst:
+		# print num
+		# print str(num)
+		compressed_str += ' ' + str(num)
+		# print compressed_str
+
+	return compressed_str.strip()
 
 def decompress(compressed_lst):
 	"""
@@ -152,32 +159,39 @@ def main():
 	if len(sys.argv) == 4:
 		if sys.argv[3] == 'compress':
 			try:
-				f = open(sys.argv[1], 'r')
-				# print('yest')
+				f = open(sys.argv[1], 'rb')
 
-				comp = compress(f.read())
-				# print('yest')
-				# print comp
-
-				pickle.dump(comp, open(sys.argv[2], 'wb'))
+				comp = ''.join(compress(f.read()))
 				f.close()
 
+				# pickle.dump(comp, open(sys.argv[2], 'wb'))
+				f_comp = open(sys.argv[2], 'w')
+				f_comp.write(comp)
+				f_comp.close()
+
 				printSummary(sys.argv[1], sys.argv[2])
-			except: #Exception,e:
-				# print e
+			except Exception,e:
+				print e
 				printError(0)
 		elif sys.argv[3] == 'decompress':
 			try:
-				comp = pickle.load(open(sys.argv[1], 'rb'))
+				# comp = pickle.load(open(sys.argv[1], 'rb'))
+				comp_str_list = open(sys.argv[1], 'rb').read().split()
+				# print comp_str_list
 
-				decomp = decompress(comp)
+				comp_int_lst = []
+				for num in comp_str_list:
+					comp_int_lst.append(int(num))
+
+				decomp = decompress(comp_int_lst)
 
 				f = open(sys.argv[2], 'w')
 				f.write(decomp)
 				f.close()
 
 				printSummary(sys.argv[1], sys.argv[2])
-			except:
+			except Exception,e:
+				print e
 				printError(1)
 		else:
 			printError(0)
