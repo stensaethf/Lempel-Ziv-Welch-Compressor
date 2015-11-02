@@ -122,7 +122,7 @@ def printError(num):
 	printError() prints an error and usage message.
 
 	@params: integer to customize the error message (1 if in decompress(),
-			 !1 for other).
+			 2 if in compress(), anything else for other).
 	@return: n/a.
 	"""
 	if num == 1:
@@ -156,8 +156,10 @@ def printSummary(file1, file2):
 	sys.stderr.write(str(file2) + ': ' + str(f2_bytes) + ' bytes\n')
 
 def main():
+	# Makes sure the user has provided the correct number of arguments.
 	if len(sys.argv) == 4:
 		if sys.argv[3] == 'compress':
+			# Call compress() on the given file.
 			try:
 				f = open(sys.argv[1], 'rb')
 
@@ -171,13 +173,13 @@ def main():
 
 				printSummary(sys.argv[1], sys.argv[2])
 			except Exception,e:
-				print e
+				# print e
 				printError(0)
 		elif sys.argv[3] == 'decompress':
+			# Call decompress() on the given file.
 			try:
 				# comp = pickle.load(open(sys.argv[1], 'rb'))
 				comp_str_list = open(sys.argv[1], 'rb').read().split()
-				# print comp_str_list
 
 				comp_int_lst = []
 				for num in comp_str_list:
@@ -191,7 +193,7 @@ def main():
 
 				printSummary(sys.argv[1], sys.argv[2])
 			except Exception,e:
-				print e
+				# print e
 				printError(1)
 		else:
 			printError(0)
